@@ -1,0 +1,120 @@
+{
+  "_help": "Machine-checkable dosage and never-list for this style. Run: python scripts/style_stats.py check references/markers.json draft.txt. Targets come from style-guide.md section 9 (per 1,000 words).",
+  "dosage": [
+    {
+      "name": "negation then correction (ليس/لا ... بل/وإنما/بقدر)",
+      "patterns": [
+        "(?<!\\w)(?:و)?(?:ليس|ليست|لا|لم|لن)(?!\\w)[^.؟?!]{0,90}?(?<!\\w)(?:بل|وإنما|إنما|بقدر|وإنّما)(?!\\w)"
+      ],
+      "per1k": [
+        3,
+        9
+      ]
+    },
+    {
+      "name": "hedges (يبدو، ربما، على الأقل، نوع من)",
+      "patterns": [
+        "(?<!\\w)(?:و)?(?:يبدو|تبدو|ربما|على الأقل|على أقل تقدير|نوع من|إلى حد ما)(?!\\w)"
+      ],
+      "per1k": [
+        4,
+        12
+      ]
+    },
+    {
+      "name": "precision words (تحديدًا، بالضبط، حرفيًا)",
+      "patterns": [
+        "(?<!\\w)(?:تحديدا|بالضبط|حرفيا|بالتحديد)(?!\\w)"
+      ],
+      "per1k": [
+        1.5,
+        6
+      ]
+    },
+    {
+      "name": "first-person pivots in verbs (أعتقد، أريد، أرغب...)",
+      "patterns": [
+        "(?<!\\w)(?:و|ف)?(?:أعتقد|أظن|أريد|أرغب|أذكر|أرى|لا أذكر|أميل)(?!\\w)"
+      ],
+      "per1k": [
+        1,
+        4.5
+      ]
+    },
+    {
+      "name": "questions",
+      "patterns": [
+        "؟"
+      ],
+      "per1k": [
+        0.5,
+        3
+      ]
+    },
+    {
+      "name": "quoted phrases “...”",
+      "patterns": [
+        "“[^”\\n]{1,120}”|«[^»\\n]{1,120}»"
+      ],
+      "per1k": [
+        6,
+        20
+      ]
+    },
+    {
+      "name": "semicolons",
+      "patterns": [
+        "؛|;"
+      ],
+      "per1k": [
+        0,
+        1.5
+      ]
+    }
+  ],
+  "never": [
+    {
+      "name": "exclamation mark",
+      "pattern": "!"
+    },
+    {
+      "name": "ellipsis",
+      "pattern": "…|\\.\\.\\."
+    },
+    {
+      "name": "heading, bullet or numbered list",
+      "pattern": "^\\s*(?:#{1,6}\\s|[-*•]\\s|\\d+[.)]\\s)"
+    },
+    {
+      "name": "bold",
+      "pattern": "\\*\\*"
+    },
+    {
+      "name": "recap ending (في الختام، خلاصة القول...)",
+      "pattern": "(?<!\\w)(?:و)?(?:في الختام|ختاما|خلاصة القول|في المحصلة|وفي النهاية نقول)(?!\\w)"
+    },
+    {
+      "name": "marketing superlatives",
+      "pattern": "(?<!\\w)(?:رائع|رائعة|مذهل|مذهلة|ملحمي|ملحمية|تحفة فنية|لا يفوت|لا تفوتوا|يجب الاستماع|يجب مشاهدته)(?!\\w)"
+    },
+    {
+      "name": "stacked intensifiers (جدًا، للغاية)",
+      "pattern": "(?<!\\w)(?:جدا|للغاية)(?!\\w)"
+    },
+    {
+      "name": "stand-alone first-person pronoun (أنا، or نحن opening a clause)",
+      "pattern": "(?<!\\w)(?:و|ف)?أنا(?!\\w)|(?:^|[.،؟:]\\s*)(?:و|ف)?نحن(?!\\w)"
+    },
+    {
+      "name": "moralising at the reader (يجب عليك، ينبغي عليكم)",
+      "pattern": "(?<!\\w)(?:يجب|ينبغي) (?:عليك|عليكم|على القارئ|على المستمع)(?!\\w)"
+    },
+    {
+      "name": "AI filler (من الجدير بالذكر، تجدر الإشارة...)",
+      "pattern": "من الجدير بالذكر|تجدر الإشارة|مما لا شك فيه|لا يخفى على أحد"
+    }
+  ],
+  "paragraph_openers_no_repeat": [
+    "^(?:و)?(?:لا|ليس|ليست|لم|لن)(?!\\w)"
+  ]
+}

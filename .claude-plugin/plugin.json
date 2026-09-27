@@ -1,0 +1,22 @@
+{
+  "name": "arabic-critic-essay-writer",
+  "version": "1.0.0",
+  "description": "Writes new text in the \"reflective Arabic critic\" style - long-form cultural and music criticism in formal Modern Standard Arabic that reads a work as an argument, defines things by what they are not, and closes on an unresolved tension instead of a verdict. Use whenever the user asks for an album/film/book/series/exhibition/game review, a cultural-criticism essay, a long-form analysis of an artist, a work or a social habit, an opinion essay with a critic's voice, or says \"اكتب بأسلوب الناقد\", \"",
+  "author": {
+    "name": "Moustafa Farhat",
+    "url": "https://github.com/moustafarhat"
+  },
+  "homepage": "https://github.com/moustafarhat/arabic-critic-essay-writer",
+  "repository": "https://github.com/moustafarhat/arabic-critic-essay-writer",
+  "license": "MIT",
+  "keywords": [
+    "arabic",
+    "writing",
+    "style",
+    "criticism",
+    "review",
+    "essay",
+    "personawriter",
+    "skills"
+  ]
+}

@@ -1,0 +1,35 @@
+name: release
+
+# Push a tag like v1.0.0 to publish a GitHub Release with arabic-critic-essay-writer.zip attached,
+# ready to upload in claude.ai / Claude Desktop (Settings -> Capabilities -> Skills).
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - run: python skills/arabic-critic-essay-writer/tests/run_tests.py
+      - name: Check tag matches plugin version
+        run: |
+          version=$(python -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match plugin.json version $version"
+            exit 1
+          fi
+      - name: Build skill zip
+        run: |
+          cd skills
+          zip -r ../arabic-critic-essay-writer.zip arabic-critic-essay-writer -x '*/__pycache__/*'
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" arabic-critic-essay-writer.zip --title "Arabic Critic Essay Writer $GITHUB_REF_NAME" --generate-notes

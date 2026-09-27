@@ -1,0 +1,34 @@
+{
+  "name": "arabic-critic-essay-writer",
+  "owner": {
+    "name": "Moustafa Farhat",
+    "url": "https://github.com/moustafarhat"
+  },
+  "metadata": {
+    "description": "A reflective Arabic critic's voice as a Claude skill, built with PersonaWriter."
+  },
+  "plugins": [
+    {
+      "name": "arabic-critic-essay-writer",
+      "source": "./",
+      "description": "Long-form Arabic criticism and essays in a reflective critic's voice (formal MSA).",
+      "version": "1.0.0",
+      "author": {
+        "name": "Moustafa Farhat"
+      },
+      "homepage": "https://github.com/moustafarhat/arabic-critic-essay-writer",
+      "license": "MIT",
+      "keywords": [
+        "arabic",
+        "writing",
+        "style",
+        "criticism",
+        "review",
+        "essay",
+        "personawriter",
+        "skills"
+      ],
+      "category": "productivity"
+    }
+  ]
+}
