@@ -1,0 +1,27 @@
+name: CodeQL
+
+# Standard CodeQL code scanning for the Python scripts and the GitHub Actions workflows.
+# Results appear under Security -> Code scanning. Free on public repos; the `if:` guard skips
+# it (instead of failing) if the repo is ever made private without Advanced Security.
+on:
+  push: { branches: [main] }
+  pull_request:
+  schedule: [{ cron: "0 6 * * 1" }]
+  workflow_dispatch:
+
+permissions: { contents: read, security-events: write }
+
+jobs:
+  analyze:
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, actions]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: github/codeql-action/init@v4
+        with: { languages: "${{ matrix.language }}", build-mode: none }
+      - uses: github/codeql-action/analyze@v4
+        with: { category: "/language:${{ matrix.language }}" }
