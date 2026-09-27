@@ -1,35 +1,86 @@
 name: release
 
-# Push a tag like v1.0.0 to publish a GitHub Release with arabic-critic-essay-writer.zip attached,
-# ready to upload in claude.ai / Claude Desktop (Settings -> Capabilities -> Skills).
+# Publishes a GitHub Release with arabic-critic-essay-writer.zip attached whenever main carries a version in
+# .claude-plugin/plugin.json that has no release yet. Bumping the version is all it takes;
+# the tag (v<version>) is created by the release. Other pushes to main are a no-op.
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
+      - name: Read version and check for an existing release
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          if gh release view "v$version" > /dev/null 2>&1; then
+            echo "Release v$version already exists, nothing to do."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Releasing v$version."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-python@v7
+        if: steps.version.outputs.exists == 'false'
         with:
           python-version: "3.13"
-      - run: python skills/arabic-critic-essay-writer/tests/run_tests.py
-      - name: Check tag matches plugin version
+
+      - name: Run tests and check manifests agree
+        if: steps.version.outputs.exists == 'false'
+        env:
+          PYTHONIOENCODING: utf-8
         run: |
-          version=$(python -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
-          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
-            echo "::error::Tag $GITHUB_REF_NAME does not match plugin.json version $version"
-            exit 1
-          fi
+          python skills/arabic-critic-essay-writer/tests/run_tests.py
+          python - <<'EOF'
+          import json, sys
+          plugin = json.load(open(".claude-plugin/plugin.json", encoding="utf-8"))
+          market = json.load(open(".claude-plugin/marketplace.json", encoding="utf-8"))
+          v = plugin["version"]
+          entry = next(p for p in market["plugins"] if p["name"] == plugin["name"])
+          if entry["version"] != v:
+              sys.exit(f"marketplace.json has {entry['version']}, plugin.json has {v}: bump both")
+          if f"## {v}" not in open("CHANGELOG.md", encoding="utf-8").read():
+              sys.exit(f"CHANGELOG.md has no '## {v}' section")
+          print(f"manifests and changelog agree on {v}")
+          EOF
+
       - name: Build skill zip
+        if: steps.version.outputs.exists == 'false'
         run: |
           cd skills
           zip -r ../arabic-critic-essay-writer.zip arabic-critic-essay-writer -x '*/__pycache__/*'
+
       - name: Publish release
+        if: steps.version.outputs.exists == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" arabic-critic-essay-writer.zip --title "Arabic Critic Essay Writer $GITHUB_REF_NAME" --generate-notes
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          # release notes = this version's CHANGELOG section
+          python3 - "$TAG" > notes.md <<'EOF'
+          import re, sys
+          version = sys.argv[1][1:]
+          text = open("CHANGELOG.md", encoding="utf-8").read()
+          m = re.search(rf"^## {re.escape(version)}\s*\n(.*?)(?=^## |\Z)", text, re.S | re.M)
+          print(m.group(1).strip() if m else "")
+          EOF
+          gh release create "$TAG" arabic-critic-essay-writer.zip \
+            --target "$GITHUB_SHA" \
+            --title "Arabic Critic Essay Writer $TAG" \
+            --notes-file notes.md

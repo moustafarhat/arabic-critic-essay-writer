@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Releases publish automatically: bump the version in `plugin.json` and `marketplace.json`, add a
+  `## <version>` section here, push to `main`, and the workflow tests, tags and publishes the zip.
 - New example: «infinite regress, from Zeno to Gödel», a long-form philosophy essay, with its check results.
 - README: examples table and a "Share your essays" section inviting contributions.
 
