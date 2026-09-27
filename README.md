@@ -42,7 +42,7 @@ abstraction. No exclamation marks, no lists, no superlatives, no «في الخت
 
 ## Example
 
-From [the full example](examples/the-photos-we-never-look-at.md), an essay on photographing
+From [the first example](examples/the-photos-we-never-look-at.md), an essay on photographing
 everything and never looking at the photos (similarity 97/100, all dosage and never-list checks pass):
 
 <div dir="rtl">
@@ -53,6 +53,27 @@ everything and never looking at the photos (similarity 97/100, all dosage and ne
 
 The example page also shows how the first draft failed the signature check (too many negation
 frames and hedges) and what was cut to fix it.
+
+All examples, each with its check results:
+
+| Essay | Genre | Length | Similarity |
+|---|---|---|---|
+| [The photos we never look at](examples/the-photos-we-never-look-at.md) | Essay on a social habit | ~550 words | 97/100 |
+| [Infinite regress, from Zeno to Gödel](examples/infinite-regress-zeno-to-godel.md) ([@moustafarhat](https://github.com/moustafarhat)) | Long-form philosophy essay | ~1,270 words | 97/100 |
+
+## Share your essays
+
+Wrote something good with this skill? Add it to the examples so others can see what the voice
+does on new subjects:
+
+1. Add `examples/<short-title>.md` with the prompt you used (or a one-line summary), the essay
+   inside `<div dir="rtl">`, and the output of the three checks (see [How drafts are checked](#how-drafts-are-checked)).
+2. Add a row to the table above, with your GitHub handle if you want credit.
+3. Open a pull request. No account to spare? Open an issue and paste the essay there.
+
+Please share only your own original text, check names, dates and titles, and don't include quotes
+you can't verify. Examples that fail a check are welcome too, with a line on why; they show where
+the voice bends.
 
 ## Install
 

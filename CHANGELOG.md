@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- New example: «infinite regress, from Zeno to Gödel», a long-form philosophy essay, with its check results.
+- README: examples table and a "Share your essays" section inviting contributions.
+
 ## 1.0.0
 
 - First public release. Generated with PersonaWriter from one long-form Arabic music-criticism

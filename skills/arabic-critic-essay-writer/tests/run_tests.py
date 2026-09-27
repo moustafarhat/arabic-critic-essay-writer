@@ -40,6 +40,8 @@ check(not good["never"], "check: a clean draft has no never-list hits")
 check(any(d["status"] == "too many" for d in good["dosage"]), "check: signature overdose is reported")
 example = ss.check_data(markers, read("tests/example_essay.txt"))
 check(not example["problems"], "check: the published example essay passes dosage and never-list")
+regress = ss.check_data(markers, read("tests/example_infinite_regress.txt"))
+check(not regress["never"], "check: the infinite-regress example has no never-list hits")
 
 prof = json.loads(read("references/profile.json"))
 res = ss.compare_data(prof, ss.analyze_text(read("tests/sample_draft.txt")))
